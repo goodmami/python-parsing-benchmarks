@@ -50,9 +50,16 @@ def test_string(parse_json):
     assert parse_json('"\ud834\udd1e"') in ('𝄞', '\ud834\udd1e')
     with pytest.raises(Exception):
         parse_json("'abc'")
-    for c in '\b\f\n\r\t':
-        with pytest.raises(Exception):
-            parse_json(f'"{c}"')
+    with pytest.raises(Exception):
+        parse_json(f'"\b"')
+    with pytest.raises(Exception):
+        parse_json(f'"\f"')
+    with pytest.raises(Exception):
+        parse_json(f'"\n"')
+    with pytest.raises(Exception):
+        parse_json(f'"\r"')
+    with pytest.raises(Exception):
+        parse_json(f'"\t"')
 
 
 def test_array(parse_json):
@@ -69,7 +76,7 @@ def test_array(parse_json):
     assert parse_json('[true,false,null]') == [True, False, None]
     assert parse_json('[true, false, null]') == [True, False, None]
     assert parse_json('[true ,false ,null]') == [True, False, None]
-    assert parse_json('[true,\n false,\n null]') == [True, False, None]
+    assert parse_json('[\n true,\t false,\r null]') == [True, False, None]
     with pytest.raises(Exception):
         parse_json('[1 2]')
     with pytest.raises(Exception):
@@ -100,7 +107,7 @@ def test_object(parse_json):
         '{"name1" :true ,"name2" :false ,"name3" :null}') == {
         'name1': True, 'name2': False, 'name3': None}
     assert parse_json(
-        '{\n "name1": true,\n "name2": false,\n "name3": null}') == {
+        '{\n "name1": true,\t "name2": false,\r "name3": null}') == {
         'name1': True, 'name2': False, 'name3': None}
     assert parse_json(
         '{"name with spaces": true}') == {

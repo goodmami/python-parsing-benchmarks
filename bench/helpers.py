@@ -18,8 +18,10 @@ def _json_unescape(m):
     c = m.group(1)
     if c[0] == 'u':
         return chr(int(c[1:], 16))
-    else:
-        return _json_unesc_map[c]
+    c2 = _json_unesc_map.get(c)
+    if not c2:
+        raise ValueError(f'invalid escape sequence: {m.group(0)}')
+    return c2
 
 
 def json_unescape(s):
