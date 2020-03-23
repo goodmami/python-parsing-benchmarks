@@ -23,6 +23,7 @@ The following parsing libaries have implementations for the tasks:
 
 - [Lark](https://github.com/lark-parser/lark)
 - [pe](https://github.com/goodmami/pe)
+- [pyparsing](https://github.com/pyparsing/pyparsing/)
 - [stdlib](https://docs.python.org/3/) (Python 3 standard library modules)
 
 
