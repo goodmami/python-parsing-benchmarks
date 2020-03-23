@@ -68,3 +68,13 @@ filter out some tests:
 $ pytest --benchmark-skip    # skip performance tests
 $ pytest --benchmark-only    # skip validity tests
 ```
+
+
+## Disclaimer
+
+Performance benchmarks are not the only criterion one should use when
+choosing a parsing library, and this repository is not meant to
+declare some winner. On the one hand, there are many other valid
+criteria (ease of use, stability, security, availability, support,
+etc.), but on the other hand we can't discuss relative performance
+without numbers, so here we are.
