@@ -1,14 +1,14 @@
 
-import ast
-
 import pe
 from pe.actions import first, constant, pack
+
+from bench.helpers import json_unescape
 
 
 Json = pe.compile(
     r'''
     # Syntactic rules
-    Start    <- :Spacing Value
+    Start    <- :Spacing Value :EOF
     Value    <- Object / Array / String / Number / Constant
     Object   <- :LBRACE (Member (:COMMA Member)*)? :RBRACE
     Member   <- String :COLON Value
@@ -37,13 +37,14 @@ Json = pe.compile(
     COMMA    <- Spacing "," Spacing
     COLON    <- Spacing ":" Spacing
     Spacing  <- [\t\n\r ]*
+    EOF      <- Spacing !.
     ''',
     actions={
         'Start': first,
         'Object': pack(dict),
         'Member': pack(tuple),
         'Array': pack(list),
-        'String': ast.literal_eval,
+        'String': json_unescape,
         'Integer': int,
         'Float': float,
         'TRUE': constant(True),
@@ -54,11 +55,5 @@ Json = pe.compile(
 )
 
 
-if __name__ == '__main__':
-    import sys
-    from resource import *
-    with open(sys.argv[1]) as fh:
-        Json.match(fh.read())
-    res = getrusage(RUSAGE_SELF)
-    print(f'Time (user): {res.ru_utime}')
-    print(f'Memory (rss): {res.ru_maxrss}')
+def parse(s):
+    return Json.match(s, flags=pe.STRICT).value()

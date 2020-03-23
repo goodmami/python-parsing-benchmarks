@@ -1,8 +1,0 @@
-# for running and reporting tests
-pytest
-
-
-# parsers
-pyparsing
-parsimonious
-lark-parser

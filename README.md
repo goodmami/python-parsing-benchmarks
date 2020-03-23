@@ -1,21 +1,70 @@
-# Parser Benchmarks
+# Python Parsing Benchmarks
 
+This repository contains a suite of test cases and implementations for
+parsing text using Python. Both speed an memory usage are compared for
+each implementation. Each implementation must be:
+
+* **Correct** -- it implements the specification exactly
+  - Syntax -- it parses all valid inputs and rejects bad ones
+  - Semantics -- it produces the expected data structures
+* **Plausible** -- it only uses expected (e.g., documented) parser
+  features
+
+## Tasks Performed
+
+The following tasks are included:
+
+- [JSON](tasks/json.md)
+
+
+## Libraries Tested
+
+The following parsing libaries have implementations for the tasks:
+
+- [Lark](https://github.com/lark-parser/lark)
+- [pe](https://github.com/goodmami/pe)
+- [stdlib](https://docs.python.org/3/) (Python 3 standard library modules)
 
 
 ## Setup
 
-The `setup.sh` script will prepare a virtual environment, install the
-requirements, and generate the test data.
+Python 3.6+ is required.
+
+First create a virtual environment (recommended) and install the
+package and requirements:
 
 ``` console
-$ ./setup.sh
+$ python3 -m venv env
+$ source env/bin/activate
+(env) $ pip install .
 ```
+
+From here on it's assumed you're in the `(env)` environment.
+
+**Note:** the `pe` library is not yet on PyPI, so you'll need to clone
+its repository and install it manually for now.
+
+``` console
+$ git clone https://github.com/goodmami/pe.git
+...
+$ pip install pe/
+```
+
 
 ## Run Benchmarks
 
-The `run.sh` script will run each benchmark against each
-implementation.
+The benchmarks are implemented using [pytest](https://pytest.org) and
+[pytest-benchmark](https://github.com/ionelmc/pytest-benchmark), so to
+run all tests you can just run `pytest` itself:
 
 ``` console
-$ ./run.sh
+$ pytest
+```
+
+The performance tests can take a while to run, so you may want to
+filter out some tests:
+
+``` console
+$ pytest --benchmark-skip    # skip performance tests
+$ pytest --benchmark-only    # skip validity tests
 ```

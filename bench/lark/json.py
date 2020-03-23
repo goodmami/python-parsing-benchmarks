@@ -1,13 +1,18 @@
 
 from lark import Lark, Transformer, v_args
 
+from bench.helpers import json_unescape
+
+
+# NOTE: the ; after value is to detect the end of the input
+
 json_grammar = r"""
-    ?start: value
+    ?start: value ";"
 
     ?value: object
           | array
           | string
-          | SIGNED_NUMBER      -> number
+          | NUMBER             -> number
           | "true"             -> true
           | "false"            -> false
           | "null"             -> null
@@ -16,10 +21,17 @@ json_grammar = r"""
     object : "{" [pair ("," pair)*] "}"
     pair   : string ":" value
 
-    string : ESCAPED_STRING
+    string : STRING
+    STRING: "\"" INNER* "\""
+    INNER: /[ !#-\[\]-\U0010ffff]*/
+         | /\\(?:["\/\\bfnrt]|u[0-9A-Fa-f]{4})/
 
-    %import common.ESCAPED_STRING
-    %import common.SIGNED_NUMBER
+    NUMBER : INTEGER FRACTION? EXPONENT?
+    INTEGER: ["-"] ("0" | "1".."9" INT?)
+    FRACTION: "." INT
+    EXPONENT: ("e"|"E") ["+"|"-"] INT
+
+    %import common.INT
     %import common.WS
 
     %ignore WS
@@ -29,7 +41,7 @@ json_grammar = r"""
 class TreeToJson(Transformer):
     @v_args(inline=True)
     def string(self, s):
-        return s[1:-1].replace('\\"', '"')
+        return json_unescape(s)
 
     array = list
     pair = tuple
@@ -51,13 +63,8 @@ json_parser = Lark(json_grammar, parser='lalr',
                    maybe_placeholders=False,
                    # Using an internal transformer is faster and more memory efficient
                    transformer=TreeToJson())
-parse = json_parser.parse
 
-if __name__ == '__main__':
-    import sys
-    from resource import *
-    with open(sys.argv[1]) as fh:
-        parse(fh.read())
-    res = getrusage(RUSAGE_SELF)
-    print(f'Time (user): {res.ru_utime}')
-    print(f'Memory (rss): {res.ru_maxrss}')
+
+def parse(s):
+    # trailing ; is currently necessary to detect end of input
+    return json_parser.parse(s + ';')
