@@ -36,6 +36,7 @@ setup(
         'pytest',
         'pytest-benchmark',
         'lark-parser',
+        'pyparsing',
     ],
     packages=find_packages(
         include=[
