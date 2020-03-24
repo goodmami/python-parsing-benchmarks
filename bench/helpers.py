@@ -26,3 +26,20 @@ def _json_unescape(m):
 
 def json_unescape(s):
     return _json_unesc_re.sub(_json_unescape, s[1:-1])
+
+
+def apply_infix(term, *rest):
+    if rest:
+        op, rhs = rest
+        return op(term, rhs)
+    else:
+        return term
+
+
+def reduce_infix(term, *rest):
+    total = term
+    for i in range(0, len(rest), 2):
+        op = rest[i]
+        rhs = rest[i+1]
+        total = op(total, rhs)
+    return total
