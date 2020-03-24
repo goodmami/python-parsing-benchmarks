@@ -15,6 +15,7 @@ each implementation. Each implementation must be:
 The following tasks are included:
 
 - [JSON](tasks/json.md)
+- [Arithmetic](tasks/arithmetic.md)
 
 
 ## Libraries Tested

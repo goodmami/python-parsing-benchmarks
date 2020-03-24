@@ -21,6 +21,10 @@ which is useful for testing pathological backtracking. I have removed
 the need to parse names (e.g., `a + b`) to aid in computing the actual
 numerical results of the expressions for validation.
 
+(*Note*: these modifications seem to have made it less pathological
+regarding backtracking; the task may therefore change to try and
+recreate the difficulty)
+
 Here is a rough description of the task:
 
 - there is one expression per line; except for the newline, whitespace
