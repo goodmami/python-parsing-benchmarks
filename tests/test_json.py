@@ -144,7 +144,8 @@ obj = [r'''
 big = '[' + ','.join(5000 * obj) + ']'
 
 
-def test_performance(parse_json, benchmark):
+def test_time(parse_json, benchmark):
+    benchmark.group = 'json'
     result = benchmark(parse_json, big)
     assert len(result) == 5000
 

@@ -13,16 +13,14 @@ Json = pe.compile(
     Object   <- :LBRACE (Member (:COMMA Member)*)? :RBRACE
     Member   <- String :COLON Value
     Array    <- :LBRACK (Value (:COMMA Value)*)? :RBRACK
-    String   <- ~( ["] ( !["] CHAR )* ["] )
-    Number   <- Integer / Float
+    String   <- ~( ["] CHAR* ( ESC CHAR* )* ["] )
+    Number   <- ~( INTEGER FRACTION? EXPONENT? )
     Constant <- TRUE / FALSE / NULL
-    Integer  <- ~( INTEGER ![.eE] )
-    Float    <- ~( INTEGER FRACTION? EXPONENT? )
 
     # Lexical rules
-    CHAR     <- '\\' ESCAPED / [ !#-\[\]-\U0010ffff]
-    ESCAPED  <- ["\\/bfnrt]
-              / 'u' HEX HEX HEX HEX
+    CHAR     <- [ !#-\[\]-\U0010ffff]
+    ESC      <- '\\' ( ["\\/bfnrt]
+                     / 'u' HEX HEX HEX HEX )
     HEX      <- [0-9a-fA-F]
     INTEGER  <- "-"? ("0" / [1-9] [0-9]*)
     FRACTION <- "." [0-9]+
@@ -45,8 +43,7 @@ Json = pe.compile(
         'Member': pack(tuple),
         'Array': pack(list),
         'String': json_unescape,
-        'Integer': int,
-        'Float': float,
+        'Number': float,
         'TRUE': constant(True),
         'FALSE': constant(False),
         'NULL': constant(None),
