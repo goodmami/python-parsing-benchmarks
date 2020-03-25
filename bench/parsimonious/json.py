@@ -6,45 +6,38 @@ from bench.helpers import json_unescape
 
 
 Json = Grammar(r'''
-    Start    = ~"\s*" Value ~"\s*"
-    Object   = ~"{\s*" Members? ~"\s*}"
-    Members  = Mapping (~"\s*,\s*" Mapping)*
-    Mapping  = String ~"\s*:\s*" Value
-    Array    = ~"\[\s*" Items? ~"\s*\]"
-    Items    = Value (~"\s*,\s*" Value)*
+    Start    = ~r"\s*" Value ~r"\s*"
+    Object   = ~r"{\s*" Members? ~r"\s*}"
+    Members  = Mapping (~r"\s*,\s*" Mapping)*
+    Mapping  = String ~r"\s*:\s*" Value
+    Array    = ~r"\[\s*" Items? ~r"\s*\]"
+    Items    = Value (~r"\s*,\s*" Value)*
     Value    = Object / Array / String
              / TrueVal / FalseVal / NullVal / Number
     TrueVal  = "true"
     FalseVal = "false"
     NullVal  = "null"
-    String   = ~r"\"[ !#-\[\]-\U0010ffff]*(\\.[ !#-\[\]-\U0010ffff]*)*\""
+    String   = ~r"\"[ !#-\[\]-\U0010ffff]*(?:\\(?:[\"\\/bfnrt]|u[0-9A-Fa-f]{4})[ !#-\[\]-\U0010ffff]*)*\""
     Number   = ~r"-?(0|[1-9][0-9]*)(\.\d*)?([eE][-+]?\d+)?"
 ''')
 
+
 class JsonVisitor(NodeVisitor):
-    def generic_visit(self, node, visited_children):
-        return visited_children or node
+    def generic_visit(self, node, children):
+        return children or node.text
 
     # helper functions for generic patterns
-    def combine_many_or_one(self, node, children):
-        """ Usable for following pattern:
-            values = value_and_comma* value
-        """
-        members, member = children
-        if isinstance(members, list):
-            return members + [member]
-        return [member]
+    def delimited(self, node, children):
+        items = [children[0]]
+        items.extend(item for _, item in children[1])
+        return items
 
-    def lift_first_child(self, node, visited_children):
-        """ Returns first child from `visited_children`, e.g. for::
-            rule = item optional another_optional?
-        returns `item`
-        """
-        return visited_children[0]
+    def atomic(self, node, children):
+        return children[0]
 
     # visitors
-    visit_Value = lift_first_child
-    visit_Members = visit_Items = combine_many_or_one
+    visit_Value = atomic
+    visit_Members = visit_Items = delimited
 
     def visit_Start(self, node, children):
         return children[1]
@@ -59,7 +52,6 @@ class JsonVisitor(NodeVisitor):
 
     def visit_Array(self, node, children):
         _, values, _ = children
-        print(values)
         if isinstance(values, list):
             values = values[0]
         else:
@@ -70,19 +62,19 @@ class JsonVisitor(NodeVisitor):
         key, _, value = children
         return key, value
 
-    def visit_String(self, node, visited_children):
+    def visit_String(self, node, children):
         return json_unescape(node.text)
 
-    def visit_Number(self, node, visited_children):
+    def visit_Number(self, node, children):
         return float(node.text)
 
-    def visit_TrueVal(self, node, visited_children):
+    def visit_TrueVal(self, node, children):
         return True
 
-    def visit_FalseVal(self, node, visited_children):
+    def visit_FalseVal(self, node, children):
         return False
 
-    def visit_NullVal(self, node, visited_children):
+    def visit_NullVal(self, node, children):
         return None
 
 
@@ -92,4 +84,3 @@ jv = JsonVisitor()
 def parse(s):
     tree = Json.parse(s)
     return jv.visit(tree)
-
