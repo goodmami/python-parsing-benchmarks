@@ -71,6 +71,19 @@ $ pytest --benchmark-skip    # skip performance tests
 $ pytest --benchmark-only    # skip validity tests
 ```
 
+Use `--bench` to select the implementations to test with a
+comma-separated list of names:
+
+``` console
+$ pytest --bench=pe,stdlib   # only test pe and stdlib
+```
+
+Some tests, such as finding the recursion limit in the JSON task, print the result ot stdout even if the test passes, but `pytest` filters stdout by default. To see this output, use the `-rP` option:
+
+``` console
+$ pytest -rP                 # print stdout for each test
+```
+
 
 ## Disclaimer
 
