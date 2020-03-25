@@ -10,22 +10,34 @@ each implementation. Each implementation must be:
 * **Plausible** -- it only uses expected (e.g., documented) parser
   features
 
-## Tasks Performed
+## Implementations
 
-The following tasks are included:
+This table lists the tasks performed and the libraries benchmarked. An
+empty cell indicates that there is no implementation for that library
+(yet; contributions welcome!). The stdlib implementation is held as
+the baseline and the timing numbers are a ratio to that baseline
+(e.g., 19.3 means it is 19.3 times slower than the baseline). Bold
+numbers are the fastest non-baseline implementation.
 
-- [JSON](tasks/json.md)
-- [Arithmetic](tasks/arithmetic.md)
+| Implementation | Algorithm         | [JSON]      | [Arithmetic] |
+| -------------- | ----------------- | ----------: | -----------: |
+| [stdlib]       | handwritten       | 1.0         | 1.0          |
+| [Lark]         | [LALR]            | 53.0        | **19.3**     |
+| [parsimonious] | [Rec. Desc.]      | 116.2       | --           |
+| [pe]           | [Rec. Desc.]      | **30.7**    | 22.2         |
+| [pyparsing]    | [Rec. Desc.]      | 161.9       | --           |
 
+[stdlib]: https://docs.python.org/3/
+[Lark]: https://github.com/lark-parser/lark
+[parsimonious]: https://github.com/erikrose/parsimonious
+[pe]: https://github.com/goodmami/pe
+[pyparsing]: https://github.com/pyparsing/pyparsing/
 
-## Libraries Tested
+[JSON]: tasks/json.md
+[Arithmetic]: tasks/arithmetic.md
 
-The following parsing libaries have implementations for the tasks:
-
-- [Lark](https://github.com/lark-parser/lark)
-- [pe](https://github.com/goodmami/pe)
-- [pyparsing](https://github.com/pyparsing/pyparsing/)
-- [stdlib](https://docs.python.org/3/) (Python 3 standard library modules)
+[LALR]: https://en.wikipedia.org/wiki/LALR_parser
+[Rec. Desc.]: https://en.wikipedia.org/wiki/Recursive_descent_parser
 
 
 ## Setup
