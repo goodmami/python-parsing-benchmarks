@@ -19,13 +19,15 @@ the baseline and the timing numbers are a ratio to that baseline
 (e.g., 19.3 means it is 19.3 times slower than the baseline). Bold
 numbers are the fastest non-baseline implementation.
 
-| Implementation | Algorithm         | [JSON]      | [Arithmetic] |
-| -------------- | ----------------- | ----------: | -----------: |
-| [stdlib]       | handwritten       | 1.0         | 1.0          |
-| [Lark]         | [LALR]            | 53.0        | **19.3**     |
-| [parsimonious] | [Rec. Desc.]      | 116.2       | --           |
-| [pe]           | [Rec. Desc.]      | **30.7**    | 22.2         |
-| [pyparsing]    | [Rec. Desc.]      | 161.9       | --           |
+(These numbers are run using CPython)
+
+| Implementation | Algorithm           | [JSON]      | [Arithmetic] |
+| -------------- | ------------------- | ----------: | -----------: |
+| [stdlib]       | handwritten         | 1.0         | 1.0          |
+| [Lark]         | [LALR]              | 53.0        | **19.3**     |
+| [parsimonious] | [Recursive Descent] | 116.2       | --           |
+| [pe]           | [Recursive Descent] | **30.7**    | 22.2         |
+| [pyparsing]    | [Recursive Descent] | 161.9       | --           |
 
 [stdlib]: https://docs.python.org/3/
 [Lark]: https://github.com/lark-parser/lark
@@ -37,7 +39,7 @@ numbers are the fastest non-baseline implementation.
 [Arithmetic]: tasks/arithmetic.md
 
 [LALR]: https://en.wikipedia.org/wiki/LALR_parser
-[Rec. Desc.]: https://en.wikipedia.org/wiki/Recursive_descent_parser
+[Recursive Descent]: https://en.wikipedia.org/wiki/Recursive_descent_parser
 
 
 ## Setup
