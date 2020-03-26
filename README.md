@@ -7,8 +7,16 @@ each implementation. Each implementation must be:
 * **Correct** -- it implements the specification exactly
   - Syntax -- it parses all valid inputs and rejects bad ones
   - Semantics -- it produces the expected data structures
-* **Plausible** -- it only uses expected (e.g., documented) parser
-  features
+* **Plausible** -- it only uses generally known parser features or
+  parsing strategies
+
+Validation tests can ensure the correctness of an implementation, but
+its plausibility is harder to pin down. Basically, grammars that
+require knowlege of a parser's internals or undocumented features to
+increase performance are discouraged. The grammar should be
+understandable by someone with access to the parser's documentation
+and examples.
+
 
 ## Implementations
 
@@ -50,49 +58,48 @@ First create a virtual environment (recommended) and install the
 package and requirements:
 
 ``` console
-$ python3 -m venv env
-$ source env/bin/activate
-(env) $ pip install .
+$ python3 -m venv cpy
+$ source cpy/bin/activate
+(cpy) $ pip install -r requirements.txt
 ```
 
-From here on it's assumed you're in the `(env)` environment.
-
-**Note:** the `pe` library is not yet on PyPI, so you'll need to clone
-its repository and install it manually for now.
+You can also use PyPy by creating its own virtual environment:
 
 ``` console
-$ git clone https://github.com/goodmami/pe.git
-...
-$ pip install pe/
+$ pypy3 -m venv pypy
+$ source pypy/bin/activate
+(pypy) $ pip install -r requirements.txt
 ```
 
+From here on it's assumed you're in one of the `(cpy)` or `(pypy)` environments.
 
 ## Run Benchmarks
 
 The benchmarks are implemented using [pytest](https://pytest.org) and
-[pytest-benchmark](https://github.com/ionelmc/pytest-benchmark), so to
-run all tests you can just run `pytest` itself:
+[pytest-benchmark](https://github.com/ionelmc/pytest-benchmark), so
+you can run the tests with `pytest` if you adjust `PYTHONPATH`:
 
 ``` console
-$ pytest
+$ PYTHONPATH=. pytest
 ```
 
-The performance tests can take a while to run, so you may want to
-filter out some tests:
+But it might be easier to just run the included `validate.py` and
+`benchmark.py` scripts, which pass the appropriate options on to
+`pytest`:
 
 ``` console
-$ pytest --benchmark-skip    # skip performance tests
-$ pytest --benchmark-only    # skip validity tests
+$ python validate.py   # skip performance tests (they take a while)
+$ python benchmark.py  # skip validity tests
 ```
 
-Use `--bench` to select the implementations to test with a
-comma-separated list of names:
+You can give specific library names to limit the tests that are run:
 
 ``` console
-$ pytest --bench=pe,stdlib   # only test pe and stdlib
+$ python validate.py pe stdlib  # only run validation for pe and stdlib
 ```
 
-Some tests, such as finding the recursion limit in the JSON task, print the result ot stdout even if the test passes, but `pytest` filters stdout by default. To see this output, use the `-rP` option:
+Some tests print to stdout diagnostic information that can be useful,
+such as the recursion limit in JSON parsing. Use the following option to see that information:
 
 ``` console
 $ pytest -rP                 # print stdout for each test

@@ -1,131 +1,135 @@
 
 import pytest
 
-
-def test_true(parse_json):
-    assert parse_json('true') is True
-    assert parse_json('  true  ') is True
+TASK = 'json'
 
 
-def test_false(parse_json):
-    assert parse_json('false') is False
-    assert parse_json('  false  ') is False
+def test_true(parse):
+    assert parse('true') is True
+    assert parse('  true  ') is True
 
 
-def test_null(parse_json):
-    assert parse_json('null') is None
-    assert parse_json('  null  ') is None
+def test_false(parse):
+    assert parse('false') is False
+    assert parse('  false  ') is False
 
 
-def test_number(parse_json):
-    assert parse_json('0') == 0
-    assert parse_json('  0  ') == 0
-    assert parse_json('123') == 123
-    assert parse_json('-123') == -123
-    assert parse_json('1.2') == 1.2
-    assert parse_json('-1e2') == -100
-    assert parse_json('1.2e3') == 1200
-    assert parse_json('1.2e-3') == 0.0012
-    assert parse_json('1.2e+3') == 1200
+def test_null(parse):
+    assert parse('null') is None
+    assert parse('  null  ') is None
+
+
+def test_number(parse):
+    assert parse('0') == 0
+    assert parse('  0  ') == 0
+    assert parse('123') == 123
+    assert parse('-123') == -123
+    assert parse('1.2') == 1.2
+    assert parse('-1e2') == -100
+    assert parse('1.2e3') == 1200
+    assert parse('1.2e-3') == 0.0012
+    assert parse('1.2e+3') == 1200
     with pytest.raises(Exception):
-        parse_json('01')
+        parse('01')
     with pytest.raises(Exception):
-        parse_json('+1')
+        parse('+1')
     with pytest.raises(Exception):
-        parse_json('Infinity')
+        parse('Infinity')
     with pytest.raises(Exception):
-        parse_json('NaN')
+        parse('NaN')
 
 
-def test_string(parse_json):
-    assert parse_json('""') == ''
-    assert parse_json('"abc"') == 'abc'
-    assert parse_json('  "abc"  ') == 'abc'
-    assert parse_json('"\\"\\b\\f\\n\\r\\t\\/\\\\"') == '"\b\f\n\r\t/\\'
-    assert parse_json('"字"') == '字'
-    assert parse_json('"\u5b57"') == '字'
-    assert parse_json('"\u5B57"') == '字'
-    assert parse_json('"\u4e2d文\u5b57"') == '中文字'
+def test_string(parse):
+    assert parse('""') == ''
+    assert parse('"abc"') == 'abc'
+    assert parse('  "abc"  ') == 'abc'
+    assert parse('"\\"\\b\\f\\n\\r\\t\\/\\\\"') == '"\b\f\n\r\t/\\'
+    assert parse('"字"') == '字'
+    assert parse('"\u5b57"') == '字'
+    assert parse('"\u5B57"') == '字'
+    assert parse('"\u4e2d文\u5b57"') == '中文字'
     # specification does not prescribe how to treat surrogate sequences
-    assert parse_json('"\ud834\udd1e"') in ('𝄞', '\ud834\udd1e')
+    assert parse('"\ud834\udd1e"') in ('𝄞', '\ud834\udd1e')
     with pytest.raises(Exception):
-        parse_json("'abc'")
+        parse("'abc'")
     with pytest.raises(Exception):
-        parse_json(f'"\b"')
+        parse(f'"\b"')
     with pytest.raises(Exception):
-        parse_json(f'"\f"')
+        parse(f'"\f"')
     with pytest.raises(Exception):
-        parse_json(f'"\n"')
+        parse(f'"\n"')
     with pytest.raises(Exception):
-        parse_json(f'"\r"')
+        parse(f'"\r"')
     with pytest.raises(Exception):
-        parse_json(f'"\t"')
+        parse(f'"\t"')
     with pytest.raises(Exception):
-        parse_json(f'"\\x"')
+        parse(f'"\\x"')
+    with pytest.raises(Exception):
+        parse(f'"\\uDEFG"')
 
 
-def test_array(parse_json):
+def test_array(parse):
     # assumes parser produces lists and not other iterable types
-    assert parse_json('[]') == []
-    assert parse_json('  [ \t\r\n]  ') == []
-    assert parse_json('[true]') == [True]
-    assert parse_json('[false]') == [False]
-    assert parse_json('[null]') == [None]
-    assert parse_json('[1]') == [1]
-    assert parse_json('["a"]') == ['a']
-    assert parse_json('[[]]') == [[]]
-    assert parse_json('[{}]') == [{}]
-    assert parse_json('[true,false,null]') == [True, False, None]
-    assert parse_json('[true, false, null]') == [True, False, None]
-    assert parse_json('[true ,false ,null]') == [True, False, None]
-    assert parse_json('[\n true,\t false,\r null]') == [True, False, None]
+    assert parse('[]') == []
+    assert parse('  [ \t\r\n]  ') == []
+    assert parse('[true]') == [True]
+    assert parse('[false]') == [False]
+    assert parse('[null]') == [None]
+    assert parse('[1]') == [1]
+    assert parse('["a"]') == ['a']
+    assert parse('[[]]') == [[]]
+    assert parse('[{}]') == [{}]
+    assert parse('[true,false,null]') == [True, False, None]
+    assert parse('[true, false, null]') == [True, False, None]
+    assert parse('[true ,false ,null]') == [True, False, None]
+    assert parse('[\n true,\t false,\r null]') == [True, False, None]
     with pytest.raises(Exception):
-        parse_json('[1 2]')
+        parse('[1 2]')
     with pytest.raises(Exception):
-        parse_json('[1, 2,]')
+        parse('[1, 2,]')
     with pytest.raises(Exception):
-        parse_json('[,1 ,2]')
+        parse('[,1 ,2]')
 
 
-def test_object(parse_json):
-    # assumes parse_jsonr produces dicts and not other mapping types
-    assert parse_json('{}') == {}
-    assert parse_json('  { \t\r\n}  ') == {}
-    assert parse_json('{"name": true}') == {'name': True}
-    assert parse_json('{"name": false}') == {'name': False}
-    assert parse_json('{"name": null}') == {'name': None}
-    assert parse_json('{"name": 1}') == {'name': 1}
-    assert parse_json('{"name": "a"}') == {'name': 'a'}
-    assert parse_json('{"name": []}') == {'name': []}
-    assert parse_json('{"name": {}}') == {'name': {}}
+def test_object(parse):
+    # assumes parser produces dicts and not other mapping types
+    assert parse('{}') == {}
+    assert parse('  { \t\r\n}  ') == {}
+    assert parse('{"name": true}') == {'name': True}
+    assert parse('{"name": false}') == {'name': False}
+    assert parse('{"name": null}') == {'name': None}
+    assert parse('{"name": 1}') == {'name': 1}
+    assert parse('{"name": "a"}') == {'name': 'a'}
+    assert parse('{"name": []}') == {'name': []}
+    assert parse('{"name": {}}') == {'name': {}}
 
-    assert parse_json(
+    assert parse(
         '{"name1":true,"name2":false,"name3":null}') == {
         'name1': True, 'name2': False, 'name3': None}
-    assert parse_json(
+    assert parse(
         '{"name1": true, "name2": false, "name3": null}') == {
         'name1': True, 'name2': False, 'name3': None}
-    assert parse_json(
+    assert parse(
         '{"name1" :true ,"name2" :false ,"name3" :null}') == {
         'name1': True, 'name2': False, 'name3': None}
-    assert parse_json(
+    assert parse(
         '{\n "name1": true,\t "name2": false,\r "name3": null}') == {
         'name1': True, 'name2': False, 'name3': None}
-    assert parse_json(
+    assert parse(
         '{"name with spaces": true}') == {
         'name with spaces': True}
-    assert parse_json('{"": true}') == {'': True}
+    assert parse('{"": true}') == {'': True}
 
     # it is undefined which value with a non-unique name is selected
-    assert len(parse_json('{"name": true, "name": false}')) == 1
+    assert len(parse('{"name": true, "name": false}')) == 1
     with pytest.raises(Exception):
-        parse_json('{"name": true "name": false}')
+        parse('{"name": true "name": false}')
     with pytest.raises(Exception):
-        parse_json('{"name": true, "name": false,}')
+        parse('{"name": true, "name": false,}')
     with pytest.raises(Exception):
-        parse_json('{,"name": true, "name": false}')
+        parse('{,"name": true, "name": false}')
     with pytest.raises(Exception):
-        parse_json('{"name": }')
+        parse('{"name": }')
 
 
 obj = [r'''
@@ -146,18 +150,18 @@ obj = [r'''
 big = '[' + ','.join(5000 * obj) + ']'
 
 
-def test_time(parse_json, benchmark):
+def test_time(parse, benchmark):
     benchmark.group = 'json'
-    result = benchmark(parse_json, big)
+    result = benchmark(parse, big)
     assert len(result) == 5000
 
 
-def _find_recursion_limit(parse_json, j=1001):
+def _find_recursion_limit(parse, j=1001):
     """Binary search between 1 and *j* to find the recursion limit."""
     i = 1
     while True:
         try:
-            parse_json(('[' * i) + (']' * i))
+            parse(('[' * i) + (']' * i))
         except RecursionError:
             j = i
             i = int(i / 2)
@@ -167,11 +171,11 @@ def _find_recursion_limit(parse_json, j=1001):
             if j - i <= 1:
                 break
             i += int((j - i) / 2)
-    parse_json(('[' * i) + (']' * i))
+    parse(('[' * i) + (']' * i))
     return i
 
 
-def test_recursion(parse_json):
-    limit = _find_recursion_limit(parse_json, 1001)
+def test_recursion(parse):
+    limit = _find_recursion_limit(parse, 1001)
     assert limit > 50
     print(f'recursion limit: {"1000+" if limit >= 1000 else limit}')

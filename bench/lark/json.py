@@ -7,19 +7,26 @@ from bench.helpers import json_unescape
 # NOTE: the ; after value is to detect the end of the input
 
 json_grammar = r"""
-    ?start: value ";"
+    ?start: _WS? value _WS? ";"
 
     ?value: object
           | array
           | string
-          | NUMBER             -> number
+          | NUMBER      -> number
           | "true"             -> true
           | "false"            -> false
           | "null"             -> null
 
-    array  : "[" [value ("," value)*] "]"
-    object : "{" [pair ("," pair)*] "}"
-    pair   : string ":" value
+    array  : _BRACK1 [value (_COMMA value)*] _BRACK2
+    object : _CURLY1 [pair (_COMMA pair)*] _CURLY2
+    pair   : string _COLON value
+
+    _COLON: /\s*:\s*/
+    _COMMA: /\s*,\s*/
+    _CURLY1: /\s*{\s*/
+    _CURLY2: /\s*}\s*/
+    _BRACK1: /\s*\[\s*/
+    _BRACK2: /\s*\]\s*/
 
     string : STRING
     STRING: "\"" INNER* "\""
@@ -31,10 +38,9 @@ json_grammar = r"""
     FRACTION: "." INT
     EXPONENT: ("e"|"E") ["+"|"-"] INT
 
-    %import common.INT
-    %import common.WS
+    _WS: /\s+/
 
-    %ignore WS
+    %import common.INT
 """
 
 

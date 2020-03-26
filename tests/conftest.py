@@ -1,6 +1,7 @@
 
 import argparse
 import pkgutil
+import importlib
 
 import pytest
 
@@ -34,34 +35,26 @@ def pytest_addoption(parser):
         help='comma-separated list of implementations to use')
 
 
-def pytest_configure(config):
-    config.addinivalue_line("markers", "bench: mark implementations to run")
+def _skip_missing_parse(s):
+    pytest.skip('not implemented')
 
 
-def pytest_collection_modifyitems(config, items):
-    if not config.getoption('--bench'):
-        return  # run all if --bench not given
-    imps = config.getoption('--bench')
-    implementations[:] = [imp for imp in implementations if imp in imps]
+def pytest_generate_tests(metafunc):
+    libs = metafunc.config.getoption('--bench')
+    if not libs:
+        libs = implementations
 
-
-@pytest.fixture(scope='session', params=implementations)
-def parse_json(request):
-    if request.param not in implementations:
-        pytest.skip('not selected')
-    mod = pytest.importorskip(
-        f'bench.{request.param}.json',
-        reason=f'could not import bench.{request.param}.json'
-    )
-    return mod.parse
-
-
-@pytest.fixture(scope='session', params=implementations)
-def parse_arithmetic(request):
-    if request.param not in implementations:
-        pytest.skip('not selected')
-    mod = pytest.importorskip(
-        f'bench.{request.param}.arithmetic',
-        reason=f'could not import bench.{request.param}.arithmetic'
-    )
-    return mod.parse
+    if 'parse' in metafunc.fixturenames:
+        task = metafunc.module.TASK
+        funcs = []
+        for lib in libs:
+            try:
+                mod = importlib.import_module(f'bench.{lib}.{task}')
+            except ImportError:
+                funcs.append(_skip_missing_parse)
+            else:
+                if hasattr(mod, 'parse'):
+                    funcs.append(mod.parse)
+                else:
+                    funcs.append(_skip_missing_parse)
+        metafunc.parametrize('parse', funcs)
