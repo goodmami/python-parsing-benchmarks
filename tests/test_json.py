@@ -162,7 +162,10 @@ def _find_recursion_limit(parse, j=1001):
     while True:
         try:
             parse(('[' * i) + (']' * i))
-        except RecursionError:
+        # Don't just catch RecursionError in case a library throws
+        # something else; if it's not a recursion error, this loop
+        # will quickly go to 0
+        except Exception:
             j = i
             i = int(i / 2)
             if i <= 1:
@@ -171,7 +174,6 @@ def _find_recursion_limit(parse, j=1001):
             if j - i <= 1:
                 break
             i += int((j - i) / 2)
-    parse(('[' * i) + (']' * i))
     return i
 
 

@@ -27,7 +27,7 @@ the baseline and the timing numbers are a ratio to that baseline
 (e.g., 19.3 means it is 19.3 times slower than the baseline). Bold
 numbers are the fastest non-baseline implementation.
 
-(These numbers are run using CPython)
+### Using CPython
 
 | Implementation | Algorithm           | [JSON]      | [Arithmetic] |
 | -------------- | ------------------- | ----------: | -----------: |
@@ -36,6 +36,17 @@ numbers are the fastest non-baseline implementation.
 | [parsimonious] | [Recursive Descent] | 116.2       | --           |
 | [pe]           | [Recursive Descent] | **30.7**    | 22.2         |
 | [pyparsing]    | [Recursive Descent] | 161.9       | --           |
+
+
+### Using PyPy
+
+| Implementation | Algorithm           | [JSON]      | [Arithmetic] |
+| -------------- | ------------------- | ----------: | -----------: |
+| [stdlib]       | handwritten         | 1.0         | 1.0          |
+| [Lark]         | [LALR]              | **2.1**     | **1.0**      |
+| [parsimonious] | [Recursive Descent] | 9.5         | --           |
+| [pe]           | [Recursive Descent] | 2.5         | 2.3          |
+| [pyparsing]    | [Recursive Descent] | 5.1         | --           |
 
 [stdlib]: https://docs.python.org/3/
 [Lark]: https://github.com/lark-parser/lark

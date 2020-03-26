@@ -57,4 +57,4 @@ def pytest_generate_tests(metafunc):
                     funcs.append(mod.parse)
                 else:
                     funcs.append(_skip_missing_parse)
-        metafunc.parametrize('parse', funcs)
+        metafunc.parametrize('parse', funcs, ids=libs)
