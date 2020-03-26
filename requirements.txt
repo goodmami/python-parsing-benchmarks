@@ -1,0 +1,11 @@
+# basic dependencies
+pytest
+pytest-benchmark
+
+# parsing libraries
+lark-parser
+parsimonious
+pyparsing
+
+-e git://github.com/goodmami/pe.git#egg=pe
+
