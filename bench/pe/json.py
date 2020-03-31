@@ -8,11 +8,11 @@ from bench.helpers import json_unescape
 Json = pe.compile(
     r'''
     # Syntactic rules
-    Start    <- :Spacing Value :EOF
+    Start    <- Spacing Value EOF
     Value    <- Object / Array / String / Number / Constant
-    Object   <- :LBRACE (Member (:COMMA Member)*)? :RBRACE
-    Member   <- String :COLON Value
-    Array    <- :LBRACK (Value (:COMMA Value)*)? :RBRACK
+    Object   <- LBRACE (Member (COMMA Member)*)? RBRACE
+    Member   <- String COLON Value
+    Array    <- LBRACK (Value (COMMA Value)*)? RBRACK
     String   <- ~( ["] CHAR* ( ESC CHAR* )* ["] )
     Number   <- ~( INTEGER FRACTION? EXPONENT? )
     Constant <- TRUE / FALSE / NULL

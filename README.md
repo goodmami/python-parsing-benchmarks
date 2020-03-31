@@ -20,33 +20,16 @@ and examples.
 
 ## Implementations
 
-This table lists the tasks performed and the libraries benchmarked. An
-empty cell indicates that there is no implementation for that library
-(yet; contributions welcome!). The stdlib implementation is held as
-the baseline and the timing numbers are a ratio to that baseline
-(e.g., 19.3 means it is 19.3 times slower than the baseline). Bold
-numbers are the fastest non-baseline implementation.
+This table lists the tasks performed and the libraries benchmarked.
 
-### Using CPython
+| Implementation | Algorithm           | [JSON]                   | [Arithmetic]             |
+| -------------- | ------------------- | ------------------------ | ---------------------    |
+| [stdlib]       | handwritten         | [yes][stdlib-json]       | [yes][stdlib-arithmetic] |
+| [Lark]         | [LALR]              | [yes][Lark-json]         | [yes][lark-arithmetic]   |
+| [parsimonious] | [Recursive Descent] | [yes][parsimonious-json] | not yet                  |
+| [pe]           | [Recursive Descent] | [yes][pe-json]           | [yes][pe-arithmetic]     |
+| [pyparsing]    | [Recursive Descent] | [yes][pyparsing-json]    | not yet                  |
 
-| Implementation | Algorithm           | [JSON]      | [Arithmetic] |
-| -------------- | ------------------- | ----------: | -----------: |
-| [stdlib]       | handwritten         | 1.0         | 1.0          |
-| [Lark]         | [LALR]              | 53.0        | **19.3**     |
-| [parsimonious] | [Recursive Descent] | 116.2       | --           |
-| [pe]           | [Recursive Descent] | **30.7**    | 22.2         |
-| [pyparsing]    | [Recursive Descent] | 161.9       | --           |
-
-
-### Using PyPy
-
-| Implementation | Algorithm           | [JSON]      | [Arithmetic] |
-| -------------- | ------------------- | ----------: | -----------: |
-| [stdlib]       | handwritten         | 1.0         | 1.0          |
-| [Lark]         | [LALR]              | **2.1**     | **1.0**      |
-| [parsimonious] | [Recursive Descent] | 9.5         | --           |
-| [pe]           | [Recursive Descent] | 2.5         | 2.3          |
-| [pyparsing]    | [Recursive Descent] | 5.1         | --           |
 
 [stdlib]: https://docs.python.org/3/
 [Lark]: https://github.com/lark-parser/lark
@@ -57,9 +40,56 @@ numbers are the fastest non-baseline implementation.
 [JSON]: tasks/json.md
 [Arithmetic]: tasks/arithmetic.md
 
+[stdlib-json]: bench/stdlib/json.py
+[Lark-json]: bench/lark/json.py
+[parsimonious-json]: bench/parsimonious/json.py
+[pe-json]: bench/pe/json.py
+[pyparsing-json]: bench/pyparsing/json.py
+
+[stdlib-arithmetic]: bench/stdlib/arithmetic.py
+[Lark-arithmetic]: bench/lark/arithmetic.py
+[pe-arithmetic]: bench/pe/arithmetic.py
+
 [LALR]: https://en.wikipedia.org/wiki/LALR_parser
 [Recursive Descent]: https://en.wikipedia.org/wiki/Recursive_descent_parser
 
+## Results
+
+The following bar chart shows the time in milliseconds to parse a ~5MB
+JSON file using both CPython and PyPy.
+
+```
+[cpython] stdlib      : ▏ 65 ms
+[cpython] pe          : ▇▇▇▇▇▇▇▇ 2228 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3948 ms
+[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8220 ms
+[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 12761 ms
+[pypy]    stdlib      : ▇ 310 ms
+[pypy]    pe          : ▇▇ 641 ms
+[pypy]    lark        : ▇▇ 648 ms
+[pypy]    pyparsing   : ▇▇▇▇▇▇ 1701 ms
+[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇▇▇ 2884 ms
+```
+
+Here are the results for parsing 10k complicated (from a parsing point
+of view) arithmetic expressions:
+
+
+```
+[cpython] stdlib      : ▇▇ 117.59 ms
+[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1924.31 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2079.69 ms
+[pypy]    lark        : ▇▇▇▇▇ 218.12 ms
+[pypy]    stdlib      : ▇▇▇▇▇ 228.27 ms
+[pypy]    pe          : ▇▇▇▇▇▇▇▇ 366 ms
+```
+
+*Charts produced with [termgraph](https://github.com/mkaz/termgraph)*
+
+These benchmarks were run on a Lenovo Thinkpad with an Intel Core-i5
+6200U with 8GB memory running Pop!_OS Linux 18.04. The millisecond
+values will change across systems but the relative performance should
+be similar (but I'd be interested in hearing if you find otherwise!).
 
 ## Setup
 
@@ -99,8 +129,8 @@ But it might be easier to just run the included `validate.py` and
 `pytest`:
 
 ``` console
-$ python validate.py   # skip performance tests (they take a while)
-$ python benchmark.py  # skip validity tests
+$ python validate.py            # skip performance tests (they take a while)
+$ python benchmark.py           # skip validity tests
 ```
 
 You can give specific library names to limit the tests that are run:
@@ -113,7 +143,7 @@ Some tests print to stdout diagnostic information that can be useful,
 such as the recursion limit in JSON parsing. Use the following option to see that information:
 
 ``` console
-$ pytest -rP                 # print stdout for each test
+$ python validate.py -rP        # print stdout for each test
 ```
 
 

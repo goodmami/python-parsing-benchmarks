@@ -16,13 +16,13 @@ def reduce_prefix(*args):
 
 Arithmetic = pe.compile(
     r'''
-    Start   <- :Spacing Expr :EOL? EOF
+    Start   <- Spacing Expr EOL? EOF
     Expr    <- Term ((PLUS / MINUS) Term)*
     Term    <- Factor ((TIMES / DIVIDE) Factor)*
-    Factor  <- Sign* (:LPAR Expr :RPAR
+    Factor  <- Sign* (LPAR Expr RPAR
                      / INTEGER )
-    Sign    <- NEG / :POS
-    INTEGER <- ~( '0' / [1-9] [0-9]* ) :Spacing
+    Sign    <- NEG / POS
+    INTEGER <- ~( '0' / [1-9] [0-9]* ) Spacing
     PLUS    <- '+' Spacing
     MINUS   <- '-' Spacing
     TIMES   <- '*' Spacing
