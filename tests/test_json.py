@@ -150,10 +150,16 @@ obj = [r'''
 big = '[' + ','.join(5000 * obj) + ']'
 
 
-def test_time(parse, benchmark):
+def test_parse_time(parse, benchmark):
     benchmark.group = 'json'
     result = benchmark(parse, big)
     assert len(result) == 5000
+
+
+def test_compile_time(compile, benchmark):
+    benchmark.group = 'json-compile'
+    parse = benchmark(compile)
+    assert parse('{"foo": 1.234e-5}') == {'foo': 1.234e-5}
 
 
 def _find_recursion_limit(parse, j=1001):

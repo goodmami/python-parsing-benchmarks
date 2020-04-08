@@ -35,8 +35,20 @@ def pytest_addoption(parser):
         help='comma-separated list of implementations to use')
 
 
-def _skip_missing_parse(s):
+def _skip_missing(*args, **kwargs):
     pytest.skip('not implemented')
+
+
+def _get_funcs(libs, task, fixturename):
+    funcs = []
+    for lib in libs:
+        try:
+            mod = importlib.import_module(f'bench.{lib}.{task}')
+        except ImportError:
+            funcs.append(_skip_missing)
+        else:
+            funcs.append(getattr(mod, fixturename, _skip_missing))
+    return funcs
 
 
 def pytest_generate_tests(metafunc):
@@ -44,17 +56,9 @@ def pytest_generate_tests(metafunc):
     if not libs:
         libs = implementations
 
-    if 'parse' in metafunc.fixturenames:
-        task = metafunc.module.TASK
-        funcs = []
-        for lib in libs:
-            try:
-                mod = importlib.import_module(f'bench.{lib}.{task}')
-            except ImportError:
-                funcs.append(_skip_missing_parse)
-            else:
-                if hasattr(mod, 'parse'):
-                    funcs.append(mod.parse)
-                else:
-                    funcs.append(_skip_missing_parse)
-        metafunc.parametrize('parse', funcs, ids=libs)
+    task = metafunc.module.TASK
+
+    for fixturename in ('parse', 'compile'):
+        if fixturename in metafunc.fixturenames:
+            funcs = _get_funcs(libs, task, fixturename)
+            metafunc.parametrize(fixturename, funcs, ids=libs)

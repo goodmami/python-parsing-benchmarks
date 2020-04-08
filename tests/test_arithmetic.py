@@ -103,7 +103,7 @@ xl = 10 * block
 # xxl = 10 * xl
 
 
-def test_time(parse, benchmark):
+def test_parse_time(parse, benchmark):
     benchmark.group = 'arithmetic'
 
     def parse_all(ss):
@@ -114,3 +114,9 @@ def test_time(parse, benchmark):
 
     results = benchmark(parse_all, xl)
     assert len(results) == len(xl)
+
+
+def test_compile_time(compile, benchmark):
+    benchmark.group = 'arithmetic-compile'
+    parse = benchmark(compile)
+    assert parse('1 + 2 * 3') == 7
