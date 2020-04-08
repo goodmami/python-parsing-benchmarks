@@ -22,13 +22,13 @@ and examples.
 
 This table lists the tasks performed and the libraries benchmarked.
 
-| Implementation | Algorithm           | [JSON]                   | [Arithmetic]             |
-| -------------- | ------------------- | ------------------------ | ---------------------    |
-| [stdlib]       | handwritten         | [yes][stdlib-json]       | [yes][stdlib-arithmetic] |
-| [Lark]         | [LALR]              | [yes][Lark-json]         | [yes][lark-arithmetic]   |
-| [parsimonious] | [Recursive Descent] | [yes][parsimonious-json] | not yet                  |
-| [pe]           | [Recursive Descent] | [yes][pe-json]           | [yes][pe-arithmetic]     |
-| [pyparsing]    | [Recursive Descent] | [yes][pyparsing-json]    | not yet                  |
+| Implementation | Algorithm           | [JSON]                   | [Arithmetic]             | [INI]             |
+| -------------- | ------------------- | ------------------------ | ---------------------    | -------           |
+| [stdlib]       | handwritten         | [yes][stdlib-json]       | [yes][stdlib-arithmetic] | [yes][stdlib-ini] |
+| [Lark]         | [LALR]              | [yes][Lark-json]         | [yes][lark-arithmetic]   | [yes][lark-ini]   |
+| [parsimonious] | [Recursive Descent] | [yes][parsimonious-json] |                          |                   |
+| [pe]           | [Recursive Descent] | [yes][pe-json]           | [yes][pe-arithmetic]     | [yes][pe-ini]     |
+| [pyparsing]    | [Recursive Descent] | [yes][pyparsing-json]    |                          |                   |
 
 
 [stdlib]: https://docs.python.org/3/
@@ -39,6 +39,7 @@ This table lists the tasks performed and the libraries benchmarked.
 
 [JSON]: tasks/json.md
 [Arithmetic]: tasks/arithmetic.md
+[INI]: tasks/ini.md
 
 [stdlib-json]: bench/stdlib/json.py
 [Lark-json]: bench/lark/json.py
@@ -49,6 +50,10 @@ This table lists the tasks performed and the libraries benchmarked.
 [stdlib-arithmetic]: bench/stdlib/arithmetic.py
 [Lark-arithmetic]: bench/lark/arithmetic.py
 [pe-arithmetic]: bench/pe/arithmetic.py
+
+[stdlib-ini]: bench/stdlib/ini.py
+[Lark-ini]: bench/lark/ini.py
+[pe-ini]: bench/pe/ini.py
 
 [LALR]: https://en.wikipedia.org/wiki/LALR_parser
 [Recursive Descent]: https://en.wikipedia.org/wiki/Recursive_descent_parser
@@ -76,13 +81,25 @@ of view) arithmetic expressions:
 
 
 ```
-[cpython] stdlib      : ▇▇ 117.59 ms
-[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1924.31 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2079.69 ms
-[pypy]    lark        : ▇▇▇▇▇ 218.12 ms
-[pypy]    stdlib      : ▇▇▇▇▇ 228.27 ms
+[cpython] stdlib      : ▇▇ 118 ms
+[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1924 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2080 ms
+[pypy]    lark        : ▇▇▇▇▇ 218 ms
+[pypy]    stdlib      : ▇▇▇▇▇ 228 ms
 [pypy]    pe          : ▇▇▇▇▇▇▇▇ 366 ms
 ```
+
+And here is an INI file with 1000 sections:
+
+```
+[cpython] stdlib      : ▇▇▇▇▇▇▇▇▇▇▇▇▇ 97 ms
+[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 155 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 366 ms
+[pypy]    stdlib      : ▇▇▇▇▇▇▇ 52 ms
+[pypy]    pe          : ▇▇▇▇▇▇ 50 ms
+[pypy]    lark        : ▇▇▇▇▇▇ 49 ms
+```
+
 
 *Charts produced with [termgraph](https://github.com/mkaz/termgraph)*
 
