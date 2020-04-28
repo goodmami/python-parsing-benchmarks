@@ -2,7 +2,7 @@
 from operator import add, sub, mul, truediv as div, neg
 
 import pe
-from pe.actions import first, constant
+from pe.actions import Constant
 
 from bench.helpers import reduce_infix
 
@@ -37,16 +37,15 @@ def compile():
         EOF     <- !.
         ''',
         actions={
-            'Start': first,
             'Expr': reduce_infix,
             'Term': reduce_infix,
             'Factor': reduce_prefix,
             'INTEGER': int,
-            'PLUS': constant(add),
-            'MINUS': constant(sub),
-            'TIMES': constant(mul),
-            'DIVIDE': constant(div),
-            'NEG': constant(neg),
+            'PLUS': Constant(add),
+            'MINUS': Constant(sub),
+            'TIMES': Constant(mul),
+            'DIVIDE': Constant(div),
+            'NEG': Constant(neg),
         },
         flags=pe.OPTIMIZE
     )

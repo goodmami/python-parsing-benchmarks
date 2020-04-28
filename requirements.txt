@@ -6,6 +6,5 @@ pytest-benchmark
 lark-parser
 parsimonious
 pyparsing
-
--e git://github.com/goodmami/pe.git#egg=pe
+pe
 

@@ -64,16 +64,16 @@ The following bar chart shows the time in milliseconds to parse a ~5MB
 JSON file using both CPython and PyPy.
 
 ```
-[cpython] stdlib      : ▏ 65 ms
-[cpython] pe          : ▇▇▇▇▇▇▇▇ 2228 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3948 ms
-[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8220 ms
-[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 12761 ms
-[pypy]    stdlib      : ▇ 310 ms
-[pypy]    pe          : ▇▇ 641 ms
-[pypy]    lark        : ▇▇ 648 ms
-[pypy]    pyparsing   : ▇▇▇▇▇▇ 1701 ms
-[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇▇▇ 2884 ms
+[cpython] stdlib      : ▏ 77 ms
+[cpython] pe          : ▇▇▇▇▇▇▇ 2055 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4029 ms
+[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8726 ms
+[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 13443 ms
+[pypy]    stdlib      : ▇ 320 ms
+[pypy]    lark        : ▇▇ 704 ms
+[pypy]    pe          : ▇▇ 734 ms
+[pypy]    pyparsing   : ▇▇▇▇▇ 1357 ms
+[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇▇▇ 3160 ms
 ```
 
 Here are the results for parsing 10k complicated (from a parsing point
@@ -81,23 +81,23 @@ of view) arithmetic expressions:
 
 
 ```
-[cpython] stdlib      : ▇▇ 118 ms
-[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1924 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2080 ms
-[pypy]    lark        : ▇▇▇▇▇ 218 ms
-[pypy]    stdlib      : ▇▇▇▇▇ 228 ms
-[pypy]    pe          : ▇▇▇▇▇▇▇▇ 366 ms
+[cpython] stdlib      : ▇▇ 132 ms
+[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2200 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2304 ms
+[pypy]    stdlib      : ▇▇▇▇ 209 ms
+[pypy]    lark        : ▇▇▇▇ 222 ms
+[pypy]    pe          : ▇▇▇▇▇▇▇▇▇▇▇▇ 591 ms
 ```
 
 And here is an INI file with 1000 sections:
 
 ```
-[cpython] stdlib      : ▇▇▇▇▇▇▇▇▇▇▇▇▇ 97 ms
-[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 155 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 366 ms
-[pypy]    stdlib      : ▇▇▇▇▇▇▇ 52 ms
-[pypy]    pe          : ▇▇▇▇▇▇ 50 ms
-[pypy]    lark        : ▇▇▇▇▇▇ 49 ms
+[cpython] stdlib      : ▇▇▇▇▇▇▇▇▇▇▇▇ 97 ms
+[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 187 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 379 ms
+[pypy]    stdlib      : ▇▇▇▇ 33 ms
+[pypy]    lark        : ▇▇▇▇▇▇ 51 ms
+[pypy]    pe          : ▇▇▇▇▇▇▇▇ 67 ms
 ```
 
 

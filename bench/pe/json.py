@@ -1,6 +1,6 @@
 
 import pe
-from pe.actions import first, constant, pack
+from pe.actions import Constant, Pack, Raw
 
 from bench.helpers import json_unescape
 
@@ -14,8 +14,8 @@ def compile():
         Object   <- LBRACE (Member (COMMA Member)*)? RBRACE
         Member   <- String COLON Value
         Array    <- LBRACK (Value (COMMA Value)*)? RBRACK
-        String   <- ~( ["] CHAR* ( ESC CHAR* )* ["] )
-        Number   <- ~( INTEGER FRACTION? EXPONENT? )
+        String   <- ["] CHAR* ( ESC CHAR* )* ["]
+        Number   <- INTEGER FRACTION? EXPONENT?
         Constant <- TRUE / FALSE / NULL
 
         # Lexical rules
@@ -39,15 +39,14 @@ def compile():
         EOF      <- Spacing !.
         ''',
         actions = {
-            'Start': first,
-            'Object': pack(dict),
-            'Member': pack(tuple),
-            'Array': pack(list),
-            'String': json_unescape,
-            'Number': float,
-            'TRUE': constant(True),
-            'FALSE': constant(False),
-            'NULL': constant(None),
+            'Object': Pack(dict),
+            'Member': Pack(tuple),
+            'Array': Pack(list),
+            'String': Raw(json_unescape),
+            'Number': Raw(float),
+            'TRUE': Constant(True),
+            'FALSE': Constant(False),
+            'NULL': Constant(None),
         },
         flags=pe.OPTIMIZE)
     return lambda s: Json.match(s, flags=pe.STRICT).value()

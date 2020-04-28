@@ -1,6 +1,6 @@
 
 import pe
-from pe.actions import first, constant, pack
+from pe.actions import Constant, Pack, Raw
 
 
 def _normalize_multiline(s):
@@ -18,8 +18,8 @@ def compile():
         Title   <- '[' ~(![\]=\n\r] .)* ']'
         Body    <- Comment* (Pair Comment*)*
         Pair    <- Space* Key ('=' val:Value)?
-        Key     <- !Title ~(![=\n\r] .)+
-        Value   <- ~('\\' EOL / !EOL .)*
+        Key     <- !Title (![=\n\r] .)+
+        Value   <- ('\\' EOL / !EOL .)*
 
         Comment <- Space* (';' (!EOL .)*)? (EOL / EOF)
         Space   <- [\t ]
@@ -27,12 +27,12 @@ def compile():
         EOF     <- !.
         ''',
         actions={
-            'Start': pack(dict),
-            'Section': pack(tuple),
-            'Body': pack(dict),
+            'Start': Pack(dict),
+            'Section': Pack(tuple),
+            'Body': Pack(dict),
             'Pair': lambda key, val=None: (key, val),
-            'Key': str.strip,
-            'Value': _normalize_multiline,
+            'Key': Raw(str.strip),
+            'Value': Raw(_normalize_multiline),
         },
         flags=pe.OPTIMIZE
     )
