@@ -5,6 +5,6 @@ pytest-benchmark
 # parsing libraries
 lark-parser
 parsimonious
-pyparsing
 pe
-
+pyparsing
+sly

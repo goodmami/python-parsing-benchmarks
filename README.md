@@ -29,6 +29,7 @@ This table lists the tasks performed and the libraries benchmarked.
 | [parsimonious] | [Recursive Descent] | [yes][parsimonious-json] |                          |                   |
 | [pe]           | [Recursive Descent] | [yes][pe-json]           | [yes][pe-arithmetic]     | [yes][pe-ini]     |
 | [pyparsing]    | [Recursive Descent] | [yes][pyparsing-json]    |                          |                   |
+| [SLY]          | [LALR]              | [yes][SLY-json]          |                          |                   |
 
 
 [stdlib]: https://docs.python.org/3/
@@ -36,6 +37,7 @@ This table lists the tasks performed and the libraries benchmarked.
 [parsimonious]: https://github.com/erikrose/parsimonious
 [pe]: https://github.com/goodmami/pe
 [pyparsing]: https://github.com/pyparsing/pyparsing/
+[SLY]: https://github.com/dabeaz/sly/
 
 [JSON]: tasks/json.md
 [Arithmetic]: tasks/arithmetic.md
@@ -46,6 +48,7 @@ This table lists the tasks performed and the libraries benchmarked.
 [parsimonious-json]: bench/parsimonious/json.py
 [pe-json]: bench/pe/json.py
 [pyparsing-json]: bench/pyparsing/json.py
+[SLY-json]: bench/lark/json.py
 
 [stdlib-arithmetic]: bench/stdlib/arithmetic.py
 [Lark-arithmetic]: bench/lark/arithmetic.py
@@ -64,16 +67,18 @@ The following bar chart shows the time in milliseconds to parse a ~5MB
 JSON file using both CPython and PyPy.
 
 ```
-[cpython] stdlib      : ▏ 77 ms
-[cpython] pe          : ▇▇▇▇▇▇▇ 2055 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4029 ms
-[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8726 ms
-[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 13443 ms
-[pypy]    stdlib      : ▇ 320 ms
-[pypy]    lark        : ▇▇ 704 ms
-[pypy]    pe          : ▇▇ 734 ms
-[pypy]    pyparsing   : ▇▇▇▇▇ 1357 ms
-[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇▇▇ 3160 ms
+[cpython] stdlib      : ▏ 97 ms
+[cpython] pe          : ▇▇▇▇▇▇▇ 1931 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3799 ms
+[cpython] sly         : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4166 ms
+[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8377 ms
+[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 12412 ms
+[pypy]    stdlib      : ▇ 288 ms
+[pypy]    pe          : ▇▇ 574 ms
+[pypy]    lark        : ▇▇ 638 ms
+[pypy]    sly         : ▇▇ 656 ms
+[pypy]    pyparsing   : ▇▇▇▇▇ 1283 ms
+[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇ 3004 ms
 ```
 
 Here are the results for parsing 10k complicated (from a parsing point
