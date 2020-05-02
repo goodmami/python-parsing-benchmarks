@@ -48,7 +48,7 @@ This table lists the tasks performed and the libraries benchmarked.
 [parsimonious-json]: bench/parsimonious/json.py
 [pe-json]: bench/pe/json.py
 [pyparsing-json]: bench/pyparsing/json.py
-[SLY-json]: bench/lark/json.py
+[SLY-json]: bench/sly/json.py
 
 [stdlib-arithmetic]: bench/stdlib/arithmetic.py
 [Lark-arithmetic]: bench/lark/arithmetic.py
