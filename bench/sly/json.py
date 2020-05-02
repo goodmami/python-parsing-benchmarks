@@ -1,4 +1,12 @@
 
+"""
+JSON parser implemented with SLY
+
+Implemented by Michael Wayne Goodman. For license information, see
+https://github.com/goodmami/python-parsing-benchmarks/
+
+"""
+
 from sly import Lexer, Parser
 
 from bench.helpers import json_unescape
