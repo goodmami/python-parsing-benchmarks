@@ -8,3 +8,4 @@ parsimonious
 pe
 pyparsing
 sly
+textx

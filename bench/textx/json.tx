@@ -1,0 +1,36 @@
+/*
+    A grammar for JSON data-interchange format.
+    See: http://www.json.org/
+*/
+File:
+    Value
+;
+
+Array:
+    "[" values*=Value[','] "]"
+;
+
+Value:
+    STRING | FLOAT | BOOL | Object | Array | "null"
+;
+
+
+STRING:
+    /"([ !#-\[\]-\U0010ffff]+|\\(["\/\\bfnrt]|u[0-9A-Fa-f]{4}))*"/
+;
+
+FLOAT:
+    /-?(0|[1-9][0-9]*)(\.[0-9]+)?([Ee][+-]?[0-9]+)?/
+;
+
+BOOL:
+    /(true|false)\b/
+;
+
+Object:
+    "{" members*=Member[','] "}"
+;
+
+Member:
+    key=STRING ':' value=Value
+;
