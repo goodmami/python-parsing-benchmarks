@@ -1,11 +1,7 @@
 from textx import metamodel_from_file
-from textx.export import metamodel_export, model_export
 from os.path import join, dirname
 import collections
 
-# STRING = _(r'"([ !#-\[\]-\U0010ffff]+|\\(["\/\\bfnrt]|u[0-9A-Fa-f]{4}))*"')
-# FLOAT = _(r"-?(0|[1-9][0-9]*)(\.[0-9]+)?([Ee][+-]?[0-9]+)?")
-# BOOL = _(r"(true|false)\b", rule_name="BOOL", root=True)
 this_folder = dirname(__file__)
 
 
