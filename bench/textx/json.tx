@@ -11,7 +11,7 @@ Array:
 ;
 
 Value:
-    STRING | FLOAT | BOOL | Object | Array | "null"
+    STRING | FLOAT | BOOL | Object | Array | NULL
 ;
 
 
@@ -24,7 +24,11 @@ FLOAT:
 ;
 
 BOOL:
-    /(true|false)\b/
+    /\b(true|false)\b/
+;
+
+NULL:
+    /\bnull\b/
 ;
 
 Object:
