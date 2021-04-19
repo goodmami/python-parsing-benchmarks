@@ -1,6 +1,7 @@
 from textx import metamodel_from_file
 from os.path import join, dirname
 import collections
+from bench import helpers
 
 this_folder = dirname(__file__)
 
@@ -39,7 +40,7 @@ def compile():
         builtins={
             "FLOAT": float,
             "BOOL": lambda x: x == "true",
-            "STRING": str,
+            "STRING": helpers._json_unescape,
         },
         classes=[Member, Object, Array],
     )
