@@ -37,17 +37,15 @@ def compile():
     json_mm = metamodel_from_file(
         join(this_folder, "json.tx"),
         debug=False,
-        builtins={
-            "FLOAT": float,
-            "BOOL": lambda x: x == "true",
-            "STRING": helpers._json_unescape,
-        },
         classes=[Member, Object, Array],
     )
 
     json_mm.register_obj_processors(
         {
             "NULL": lambda _: None,
+            "STRING": lambda x: helpers.json_unescape(x),
+            "FLOAT": float,
+            "BOOL": lambda x: x == "true",
         }
     )
 
@@ -59,3 +57,4 @@ if __name__ == "__main__":
     print(parse("null"))
     assert parse("true") is True
     assert parse("null") is None, parse("null").__class__
+    assert parse(R'"\"\b\f\n\r\t\/\\"') == '"\b\f\n\r\t/\\'
