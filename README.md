@@ -30,6 +30,7 @@ This table lists the tasks performed and the libraries benchmarked.
 | [pe]           | [Recursive Descent] | [yes][pe-json]           | [yes][pe-arithmetic]     | [yes][pe-ini]     |
 | [pyparsing]    | [Recursive Descent] | [yes][pyparsing-json]    |                          |                   |
 | [SLY]          | [LALR]              | [yes][SLY-json]          |                          |                   |
+| [textX]        | [Recursive Descent] | [yes][textx-json]        |                          |                   |
 
 
 [stdlib]: https://docs.python.org/3/
@@ -38,6 +39,7 @@ This table lists the tasks performed and the libraries benchmarked.
 [pe]: https://github.com/goodmami/pe
 [pyparsing]: https://github.com/pyparsing/pyparsing/
 [SLY]: https://github.com/dabeaz/sly/
+[textX]: https://github.com/textX/textX/
 
 [JSON]: tasks/json.md
 [Arithmetic]: tasks/arithmetic.md
@@ -49,6 +51,7 @@ This table lists the tasks performed and the libraries benchmarked.
 [pe-json]: bench/pe/json.py
 [pyparsing-json]: bench/pyparsing/json.py
 [SLY-json]: bench/sly/json.py
+[textx-json]: bench/textx/json.py
 
 [stdlib-arithmetic]: bench/stdlib/arithmetic.py
 [Lark-arithmetic]: bench/lark/arithmetic.py
@@ -67,18 +70,20 @@ The following bar chart shows the time in milliseconds to parse a ~5MB
 JSON file using both CPython and PyPy.
 
 ```
-[cpython] stdlib      : ▏ 97 ms
-[cpython] pe          : ▇▇▇▇▇▇▇ 1931 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 3799 ms
-[cpython] sly         : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 4166 ms
-[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8377 ms
-[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 12412 ms
-[pypy]    stdlib      : ▇ 288 ms
-[pypy]    pe          : ▇▇ 574 ms
-[pypy]    lark        : ▇▇ 638 ms
-[pypy]    sly         : ▇▇ 656 ms
-[pypy]    pyparsing   : ▇▇▇▇▇ 1283 ms
-[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇ 3004 ms
+[cpython] stdlib      : ▏ 63 ms
+[cpython] pe          : ▇▇▇▇▇ 1646 ms
+[cpython] sly         : ▇▇▇▇▇▇▇▇▇▇▇▇ 3693 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇ 3817 ms
+[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 7590 ms
+[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 11560 ms
+[cpython] textx       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 14309 ms
+[pypy]    stdlib      : ▏ 268 ms
+[pypy]    sly         : ▇▇ 630 ms
+[pypy]    lark        : ▇▇ 651 ms
+[pypy]    pe          : ▇▇ 663 ms
+[pypy]    pyparsing   : ▇▇▇▇▇▇▇ 2085 ms
+[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇ 2821 ms
+[pypy]    textx       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5653 ms
 ```
 
 Here are the results for parsing 10k complicated (from a parsing point
@@ -86,30 +91,30 @@ of view) arithmetic expressions:
 
 
 ```
-[cpython] stdlib      : ▇▇ 132 ms
-[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2200 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2304 ms
-[pypy]    stdlib      : ▇▇▇▇ 209 ms
-[pypy]    lark        : ▇▇▇▇ 222 ms
-[pypy]    pe          : ▇▇▇▇▇▇▇▇▇▇▇▇ 591 ms
+[cpython] stdlib: ▇▇ 104 ms
+[cpython] pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1908 ms
+[cpython] lark  : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2113 ms
+[pypy]    stdlib: ▇▇▇▇▇ 212 ms
+[pypy]    lark  : ▇▇▇▇▇ 217 ms
+[pypy]    pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 712 ms
 ```
 
 And here is an INI file with 1000 sections:
 
 ```
-[cpython] stdlib      : ▇▇▇▇▇▇▇▇▇▇▇▇ 97 ms
-[cpython] pe          : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 187 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 379 ms
-[pypy]    stdlib      : ▇▇▇▇ 33 ms
-[pypy]    lark        : ▇▇▇▇▇▇ 51 ms
-[pypy]    pe          : ▇▇▇▇▇▇▇▇ 67 ms
+[cpython] stdlib: ▇▇▇▇▇▇▇▇▇▇ 71 ms
+[cpython] pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 146 ms
+[cpython] lark  : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 338 ms
+[pypy]    stdlib: ▇▇▇ 25 ms
+[pypy]    lark  : ▇▇▇▇▇▇ 47 ms
+[pypy]    pe    : ▇▇▇▇▇▇▇ 54 ms
 ```
 
 
 *Charts produced with [termgraph](https://github.com/mkaz/termgraph)*
 
 These benchmarks were run on a Lenovo Thinkpad with an Intel Core-i5
-6200U with 8GB memory running Pop!_OS Linux 18.04. The millisecond
+6200U with 24GB memory running Pop!_OS Linux 18.04. The millisecond
 values will change across systems but the relative performance should
 be similar (but I'd be interested in hearing if you find otherwise!).
 
