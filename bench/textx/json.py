@@ -1,10 +1,9 @@
-from os.path import dirname, join
-
 from bench import helpers
 from textx import metamodel_from_str
 
 
 def compile():
+
     class Object(dict):
         def __init__(self, members, parent=None):
             self.update((m.key, m.value) for m in members)
@@ -14,7 +13,7 @@ def compile():
             self.extend(values)
 
     json_mm = metamodel_from_str(
-        """/*
+        r"""/*
             A grammar for JSON data-interchange format.
             See: http://www.json.org/
         */
@@ -54,7 +53,7 @@ def compile():
         Member:
             key=STRING ':' value=Value
         ;
-""",
+        """,
         debug=False,
         classes=[Object, Array],
     )
@@ -72,8 +71,3 @@ def compile():
 
 
 parse = compile()
-# if __name__ == "__main__":
-#     print(parse("null"))
-#     assert parse("true") is True
-#     assert parse("null") is None, parse("null").__class__
-#     assert parse(R'"\"\b\f\n\r\t\/\\"') == '"\b\f\n\r\t/\\'
