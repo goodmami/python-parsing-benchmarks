@@ -47,6 +47,7 @@ def compile():
             'DIVIDE': Constant(div),
             'NEG': Constant(neg),
         },
+        parser='machine',
         flags=pe.OPTIMIZE
     )
 

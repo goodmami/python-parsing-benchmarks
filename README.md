@@ -70,20 +70,20 @@ The following bar chart shows the time in milliseconds to parse a ~5MB
 JSON file using both CPython and PyPy.
 
 ```
-[cpython] stdlib      : ▏ 63 ms
-[cpython] pe          : ▇▇▇▇▇ 1646 ms
-[cpython] sly         : ▇▇▇▇▇▇▇▇▇▇▇▇ 3693 ms
-[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇ 3817 ms
-[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 7590 ms
-[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 11560 ms
-[cpython] textx       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 14309 ms
-[pypy]    stdlib      : ▏ 268 ms
-[pypy]    sly         : ▇▇ 630 ms
-[pypy]    lark        : ▇▇ 651 ms
-[pypy]    pe          : ▇▇ 663 ms
-[pypy]    pyparsing   : ▇▇▇▇▇▇▇ 2085 ms
-[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇ 2821 ms
-[pypy]    textx       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5653 ms
+[cpython] stdlib      : ▏ 109 ms
+[cpython] pe          : ▇▇ 819 ms
+[cpython] sly         : ▇▇▇▇▇▇▇▇▇▇▇▇ 3716 ms
+[cpython] lark        : ▇▇▇▇▇▇▇▇▇▇▇▇▇ 3967 ms
+[cpython] parsimonious: ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 8150 ms
+[cpython] pyparsing   : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 11518 ms
+[cpython] textx       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 14738 ms
+[pypy]    stdlib      : ▇ 338 ms
+[pypy]    pe          : ▇▇ 599 ms
+[pypy]    sly         : ▇▇ 763 ms
+[pypy]    lark        : ▇▇ 796 ms
+[pypy]    pyparsing   : ▇▇▇▇▇▇▇ 2181 ms
+[pypy]    parsimonious: ▇▇▇▇▇▇▇▇▇ 2669 ms
+[pypy]    textx       : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 5242 ms
 ```
 
 Here are the results for parsing 10k complicated (from a parsing point
@@ -91,30 +91,30 @@ of view) arithmetic expressions:
 
 
 ```
-[cpython] stdlib: ▇▇ 104 ms
-[cpython] pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 1908 ms
-[cpython] lark  : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2113 ms
-[pypy]    stdlib: ▇▇▇▇▇ 212 ms
-[pypy]    lark  : ▇▇▇▇▇ 217 ms
-[pypy]    pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 712 ms
+[cpython] stdlib: ▇▇ 101 ms
+[cpython] pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇ 551 ms
+[cpython] lark  : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 2109 ms
+[pypy]    lark  : ▇▇▇▇▇ 253 ms
+[pypy]    stdlib: ▇▇▇▇▇▇ 260 ms
+[pypy]    pe    : ▇▇▇▇▇▇▇▇ 344 ms
 ```
 
 And here is an INI file with 1000 sections:
 
 ```
-[cpython] stdlib: ▇▇▇▇▇▇▇▇▇▇ 71 ms
-[cpython] pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 146 ms
-[cpython] lark  : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 338 ms
-[pypy]    stdlib: ▇▇▇ 25 ms
-[pypy]    lark  : ▇▇▇▇▇▇ 47 ms
-[pypy]    pe    : ▇▇▇▇▇▇▇ 54 ms
+[cpython] stdlib: ▇▇▇▇▇▇▇▇▇▇▇▇ 91 ms
+[cpython] pe    : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 125 ms
+[cpython] lark  : ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 352 ms
+[pypy]    stdlib: ▇▇▇▇ 34 ms
+[pypy]    pe    : ▇▇▇▇▇▇ 44 ms
+[pypy]    lark  : ▇▇▇▇▇▇▇ 53 ms
 ```
 
 
 *Charts produced with [termgraph](https://github.com/mkaz/termgraph)*
 
 These benchmarks were run on a Lenovo Thinkpad with an Intel Core-i5
-6200U with 24GB memory running Pop!_OS Linux 18.04. The millisecond
+6200U with 8GB memory running Pop!_OS Linux 21.04. The millisecond
 values will change across systems but the relative performance should
 be similar (but I'd be interested in hearing if you find otherwise!).
 

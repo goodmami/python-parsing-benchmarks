@@ -1,6 +1,6 @@
 
 import pe
-from pe.actions import Constant, Pack, Raw
+from pe.actions import Constant, Pack, Capture
 
 
 def _normalize_multiline(s):
@@ -12,16 +12,17 @@ def _normalize_multiline(s):
 def compile():
     INI = pe.compile(
         r'''
-        Start   <- Section* EOF
-        Section <- Comment* Header Body
+        Start   <- (Comment* Section)* Comment* EOF
+        Section <- Header Body
         Header  <- Space* Title Space* (EOL / EOF)
         Title   <- '[' ~(![\]=\n\r] .)* ']'
-        Body    <- Comment* (Pair Comment*)*
+        Body    <- (Comment* Pair)*
         Pair    <- Space* Key ('=' val:Value)?
         Key     <- !Title (![=\n\r] .)+
         Value   <- ('\\' EOL / !EOL .)*
 
-        Comment <- Space* (';' (!EOL .)*)? (EOL / EOF)
+        Comment <- (Space* ';' (!EOL .)* / Space+) (EOL / EOF)
+                 / EOL
         Space   <- [\t ]
         EOL     <- '\r\n' / [\n\r]
         EOF     <- !.
@@ -31,9 +32,10 @@ def compile():
             'Section': Pack(tuple),
             'Body': Pack(dict),
             'Pair': lambda key, val=None: (key, val),
-            'Key': Raw(str.strip),
-            'Value': Raw(_normalize_multiline),
+            'Key': Capture(str.strip),
+            'Value': Capture(_normalize_multiline),
         },
+        parser='machine',
         flags=pe.OPTIMIZE
     )
     return lambda s: INI.match(s).value()

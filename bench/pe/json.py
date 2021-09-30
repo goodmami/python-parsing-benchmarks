@@ -1,6 +1,6 @@
 
 import pe
-from pe.actions import Constant, Pack, Raw
+from pe.actions import Constant, Pack, Capture
 
 from bench.helpers import json_unescape
 
@@ -42,12 +42,13 @@ def compile():
             'Object': Pack(dict),
             'Member': Pack(tuple),
             'Array': Pack(list),
-            'String': Raw(json_unescape),
-            'Number': Raw(float),
+            'String': Capture(json_unescape),
+            'Number': Capture(float),
             'TRUE': Constant(True),
             'FALSE': Constant(False),
             'NULL': Constant(None),
         },
+        parser='machine',
         flags=pe.OPTIMIZE)
     return lambda s: Json.match(s, flags=pe.STRICT).value()
 
