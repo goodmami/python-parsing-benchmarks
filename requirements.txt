@@ -3,7 +3,7 @@ pytest
 pytest-benchmark
 
 # parsing libraries
-lark-parser
+lark>=1.0
 parsimonious
 pe
 pyparsing

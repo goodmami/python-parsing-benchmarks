@@ -1,7 +1,6 @@
+import logging; logging.basicConfig(level=logging.DEBUG)
 
 from lark import Lark, Transformer, v_args
-
-import logging; logging.basicConfig(level=logging.DEBUG)
 
 # adapted from https://github.com/lark-parser/lark/blob/master/examples/conf_lalr.py
 def compile():
@@ -41,7 +40,7 @@ def compile():
         %ignore COMMENT
         """,
         parser="lalr",
-        transformer=TreeToDict()
+        transformer=TreeToDict(),
     )
     return lambda s: parser.parse(s + '\n')
 

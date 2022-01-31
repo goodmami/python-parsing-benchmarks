@@ -59,7 +59,7 @@ def compile():
 
     json_parser = Lark(json_grammar,
                        parser='lalr',
-                       lexer='standard',
+                       lexer='basic',
                        propagate_positions=False,
                        maybe_placeholders=False,
                        transformer=TreeToJson())
