@@ -9,3 +9,4 @@ pe
 pyparsing
 sly
 textx
+lark-cython>=0.0.7
